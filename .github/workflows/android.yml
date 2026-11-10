@@ -33,13 +33,13 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Unit tests
-        run: ./gradlew testDebugUnitTest --stacktrace
+        run: ./gradlew testDebugUnitTest --stacktrace 2>&1 | tee build.log
 
       - name: Lint
-        run: ./gradlew lintDebug --stacktrace
+        run: ./gradlew lintDebug --stacktrace 2>&1 | tee -a build.log
 
       - name: Assemble debug APK
-        run: ./gradlew assembleDebug --stacktrace
+        run: ./gradlew assembleDebug --stacktrace 2>&1 | tee -a build.log
 
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
@@ -47,6 +47,24 @@ jobs:
           name: aurral-tv-debug
           path: app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
+
+      # Keeps the compiler diagnostics readable without authenticated access to
+      # the job logs: the interesting lines are pushed to a throwaway branch.
+      - name: Publish failure log
+        if: failure()
+        run: |
+          mkdir -p .ci
+          grep -E '^e: |error:|FAILURE:|What went wrong|> Task .* FAILED|Could not resolve' build.log \
+            | head -300 > .ci/last-failure.log || true
+          if [ ! -s .ci/last-failure.log ]; then
+            tail -n 400 build.log > .ci/last-failure.log
+          fi
+          git config user.name "ci"
+          git config user.email "ci@local"
+          git checkout -B ci-logs
+          git add -f .ci/last-failure.log
+          git commit -m "CI failure log for ${GITHUB_SHA}" || true
+          git push -f origin ci-logs
 
   release:
     name: Signed release
