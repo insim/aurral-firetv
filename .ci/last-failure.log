@@ -1,0 +1,24 @@
+> Task :app:compileDebugKotlin FAILED
+e: file:///home/runner/work/aurral-firetv/aurral-firetv/app/src/main/java/org/aurral/firetv/data/repository/LyricsRepository.kt:26:20 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///home/runner/work/aurral-firetv/aurral-firetv/app/src/main/java/org/aurral/firetv/data/repository/LyricsRepository.kt:26:32 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///home/runner/work/aurral-firetv/aurral-firetv/app/src/main/java/org/aurral/firetv/data/repository/LyricsRepository.kt:26:64 Unresolved reference 'song'.
+e: file:///home/runner/work/aurral-firetv/aurral-firetv/app/src/main/java/org/aurral/firetv/data/repository/LyricsRepository.kt:29:31 Unresolved reference 'artist'.
+e: file:///home/runner/work/aurral-firetv/aurral-firetv/app/src/main/java/org/aurral/firetv/data/repository/LyricsRepository.kt:30:30 Unresolved reference 'title'.
+FAILURE: Build failed with an exception.
+* What went wrong:
+> Task :app:compileDebugKotlin FAILED
+e: file:///home/runner/work/aurral-firetv/aurral-firetv/app/src/main/java/org/aurral/firetv/data/repository/LyricsRepository.kt:26:20 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///home/runner/work/aurral-firetv/aurral-firetv/app/src/main/java/org/aurral/firetv/data/repository/LyricsRepository.kt:26:32 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///home/runner/work/aurral-firetv/aurral-firetv/app/src/main/java/org/aurral/firetv/data/repository/LyricsRepository.kt:26:64 Unresolved reference 'song'.
+e: file:///home/runner/work/aurral-firetv/aurral-firetv/app/src/main/java/org/aurral/firetv/data/repository/LyricsRepository.kt:29:31 Unresolved reference 'artist'.
+e: file:///home/runner/work/aurral-firetv/aurral-firetv/app/src/main/java/org/aurral/firetv/data/repository/LyricsRepository.kt:30:30 Unresolved reference 'title'.
+FAILURE: Build failed with an exception.
+* What went wrong:
+> Task :app:compileDebugKotlin FAILED
+e: file:///home/runner/work/aurral-firetv/aurral-firetv/app/src/main/java/org/aurral/firetv/data/repository/LyricsRepository.kt:26:20 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///home/runner/work/aurral-firetv/aurral-firetv/app/src/main/java/org/aurral/firetv/data/repository/LyricsRepository.kt:26:32 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///home/runner/work/aurral-firetv/aurral-firetv/app/src/main/java/org/aurral/firetv/data/repository/LyricsRepository.kt:26:64 Unresolved reference 'song'.
+e: file:///home/runner/work/aurral-firetv/aurral-firetv/app/src/main/java/org/aurral/firetv/data/repository/LyricsRepository.kt:29:31 Unresolved reference 'artist'.
+e: file:///home/runner/work/aurral-firetv/aurral-firetv/app/src/main/java/org/aurral/firetv/data/repository/LyricsRepository.kt:30:30 Unresolved reference 'title'.
+FAILURE: Build failed with an exception.
+* What went wrong:
