@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The Aurral server usually lives on the LAN and may be served over plain HTTP.
+  Cleartext is permitted for all hosts so a self-hosted address works out of the
+  box; user trust anchors are included so self-signed TLS also works.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>
