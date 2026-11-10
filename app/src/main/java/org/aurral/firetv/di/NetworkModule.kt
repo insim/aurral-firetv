@@ -31,10 +31,13 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(credentialsProvider: CredentialsProvider): OkHttpClient =
+    fun provideOkHttpClient(
+        credentialsProvider: CredentialsProvider,
+        json: Json,
+    ): OkHttpClient =
         OkHttpClient.Builder()
             .addInterceptor(SubsonicRequestInterceptor(credentialsProvider))
-            .addInterceptor(SubsonicResponseGuardInterceptor())
+            .addInterceptor(SubsonicResponseGuardInterceptor(json))
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
