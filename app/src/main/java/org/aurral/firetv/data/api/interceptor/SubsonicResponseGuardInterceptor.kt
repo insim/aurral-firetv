@@ -20,6 +20,7 @@ class SubsonicResponseGuardInterceptor : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val response = chain.proceed(chain.request())
+        val contentType = response.body?.contentType()?.toString().orEmpty()
         val peek = runCatching { response.peekBody(PEEK_BYTES).string() }.getOrNull().orEmpty()
 
         if (!peek.contains(ENVELOPE_KEY)) {
@@ -27,8 +28,9 @@ class SubsonicResponseGuardInterceptor : Interceptor {
                 .replace(WHITESPACE, " ")
                 .take(MAX_SNIPPET)
                 .ifBlank { "<empty body>" }
-            val message = "Unexpected response from the server " +
-                "(HTTP ${response.code}, url ${chain.request().url}): $snippet"
+            val message = "Unexpected response " +
+                "(HTTP ${response.code}, ${contentType.ifBlank { "no content type" }}, " +
+                "url ${chain.request().url}): $snippet"
             response.close()
             throw SubsonicException(code = response.code, serverMessage = message)
         }
