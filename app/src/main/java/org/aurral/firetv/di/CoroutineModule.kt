@@ -8,6 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import org.aurral.firetv.di.qualifiers.ApplicationScope
+import org.aurral.firetv.di.qualifiers.MainScope
 import javax.inject.Singleton
 
 @Module
@@ -19,4 +20,10 @@ object CoroutineModule {
     @ApplicationScope
     fun provideApplicationScope(): CoroutineScope =
         CoroutineScope(SupervisorJob() + Dispatchers.Default)
+
+    @Provides
+    @Singleton
+    @MainScope
+    fun provideMainScope(): CoroutineScope =
+        CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 }

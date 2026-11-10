@@ -21,7 +21,7 @@ import org.aurral.firetv.data.api.SubsonicUrlBuilder
 import org.aurral.firetv.data.model.PlayQueue
 import org.aurral.firetv.data.model.Song
 import org.aurral.firetv.data.repository.PlayQueueRepository
-import org.aurral.firetv.di.qualifiers.ApplicationScope
+import org.aurral.firetv.di.qualifiers.MainScope
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -30,15 +30,16 @@ import javax.inject.Singleton
  * [PlaybackService], exposes a [StateFlow] of [PlaybackState] to the UI, and
  * keeps the server-side play queue in sync.
  *
- * All calls must happen on the main thread, matching the thread the controller
- * was built on (Media3 requirement).
+ * A Media3 controller may only be touched on the thread that built it, so every
+ * access here — including the background ticker and queue autosave — runs on the
+ * main thread via the injected [MainScope]. Calls from callers must be on main too.
  */
 @Singleton
 class PlaybackController @Inject constructor(
     @ApplicationContext private val context: Context,
     private val urlBuilder: SubsonicUrlBuilder,
     private val playQueueRepository: PlayQueueRepository,
-    @ApplicationScope private val scope: CoroutineScope,
+    @MainScope private val scope: CoroutineScope,
 ) {
 
     private val _state = MutableStateFlow(PlaybackState())

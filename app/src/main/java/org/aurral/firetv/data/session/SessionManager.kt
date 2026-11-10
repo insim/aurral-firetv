@@ -40,11 +40,15 @@ class SessionManager @Inject constructor(
     override fun authSalt(): String = currentSalt
 
     suspend fun initialize() {
-        val credentials = withContext(Dispatchers.IO) {
-            val persisted = settingsStore.load()
-            currentStreamSettings = StreamSettings(persisted.streamFormat, persisted.streamMaxBitRate)
-            buildCredentials(persisted, securePasswordStore.load())
-        }
+        // Encrypted storage can fail on some TV devices (corrupt Keystore entry,
+        // for example). Treat that as "signed out" rather than crashing at launch.
+        val credentials = runCatching {
+            withContext(Dispatchers.IO) {
+                val persisted = settingsStore.load()
+                currentStreamSettings = StreamSettings(persisted.streamFormat, persisted.streamMaxBitRate)
+                buildCredentials(persisted, securePasswordStore.load())
+            }
+        }.getOrNull()
         currentCredentials = credentials
         _state.value = credentials?.let(SessionState::LoggedIn) ?: SessionState.LoggedOut
     }
