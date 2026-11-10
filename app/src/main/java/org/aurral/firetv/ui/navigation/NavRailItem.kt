@@ -23,6 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.aurral.firetv.ui.theme.Accent
 import org.aurral.firetv.ui.theme.Dimens
@@ -55,7 +56,7 @@ fun NavRailItem(
             .background(background)
             .onFocusChanged { focused = it.isFocused }
             .clickable(onClick = onClick)
-            .padding(vertical = 6.dp),
+            .padding(vertical = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -70,6 +71,8 @@ fun NavRailItem(
             style = MaterialTheme.typography.bodySmall,
             color = tint,
             textAlign = TextAlign.Center,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
             modifier = Modifier.padding(top = 2.dp),
         )
     }

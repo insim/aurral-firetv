@@ -18,9 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.aurral.firetv.data.model.AlbumSort
 import org.aurral.firetv.ui.common.LoadStateListContent
 import org.aurral.firetv.ui.components.MediaCard
 import org.aurral.firetv.ui.components.SectionHeader
+import org.aurral.firetv.ui.components.SortSelector
 import org.aurral.firetv.ui.theme.Dimens
 
 private const val LOAD_MORE_DISTANCE = 20
@@ -31,10 +33,18 @@ fun AlbumsScreen(
     viewModel: AlbumsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val sort by viewModel.sort.collectAsStateWithLifecycle()
     val canLoadMore by viewModel.canLoadMore.collectAsStateWithLifecycle()
 
-    Column(modifier = Modifier.fillMaxSize().padding(top = 24.dp)) {
+    Column(modifier = Modifier.fillMaxSize().padding(top = 16.dp)) {
         SectionHeader(title = "Albums")
+        SortSelector(
+            options = AlbumSort.entries,
+            selected = sort,
+            labelOf = { it.label },
+            onSelect = viewModel::setSort,
+            modifier = Modifier.padding(horizontal = Dimens.ScreenPadding, vertical = 4.dp),
+        )
         LoadStateListContent(
             state = state,
             onRetry = viewModel::load,

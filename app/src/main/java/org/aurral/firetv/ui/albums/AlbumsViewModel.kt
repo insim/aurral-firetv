@@ -8,15 +8,15 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.aurral.firetv.data.model.Album
-import org.aurral.firetv.data.model.AlbumListType
+import org.aurral.firetv.data.model.AlbumSort
 import org.aurral.firetv.data.repository.LibraryRepository
 import org.aurral.firetv.ui.common.LoadState
 import org.aurral.firetv.ui.common.toUserMessage
 import javax.inject.Inject
 
 /**
- * Pages through the whole library one page at a time, so a very large collection
- * costs one request and one screenful of models at a time.
+ * Pages through the album grid, one page at a time. Sorting is done by the
+ * server through the album-list `type`, so it always covers the whole library.
  */
 @HiltViewModel
 class AlbumsViewModel @Inject constructor(
@@ -25,6 +25,9 @@ class AlbumsViewModel @Inject constructor(
 
     private val _state = MutableStateFlow<LoadState<List<Album>>>(LoadState.Loading)
     val state: StateFlow<LoadState<List<Album>>> = _state.asStateFlow()
+
+    private val _sort = MutableStateFlow(AlbumSort.ALPHABETICAL)
+    val sort: StateFlow<AlbumSort> = _sort.asStateFlow()
 
     private val _canLoadMore = MutableStateFlow(false)
     val canLoadMore: StateFlow<Boolean> = _canLoadMore.asStateFlow()
@@ -42,7 +45,7 @@ class AlbumsViewModel @Inject constructor(
         _canLoadMore.value = false
         viewModelScope.launch {
             _state.value = LoadState.Loading
-            runCatching { libraryRepository.albumList(PAGE_TYPE, PAGE_SIZE, offset = 0) }.fold(
+            runCatching { libraryRepository.albumList(_sort.value.listType, PAGE_SIZE, offset = 0) }.fold(
                 onSuccess = { page ->
                     offset = page.size
                     _canLoadMore.value = page.size == PAGE_SIZE
@@ -53,11 +56,17 @@ class AlbumsViewModel @Inject constructor(
         }
     }
 
+    fun setSort(sort: AlbumSort) {
+        if (_sort.value == sort) return
+        _sort.value = sort
+        load()
+    }
+
     fun loadMore() {
         if (loadingMore || !_canLoadMore.value) return
         loadingMore = true
         viewModelScope.launch {
-            runCatching { libraryRepository.albumList(PAGE_TYPE, PAGE_SIZE, offset) }.fold(
+            runCatching { libraryRepository.albumList(_sort.value.listType, PAGE_SIZE, offset) }.fold(
                 onSuccess = { page ->
                     if (page.isEmpty()) {
                         _canLoadMore.value = false
@@ -75,7 +84,6 @@ class AlbumsViewModel @Inject constructor(
     }
 
     private companion object {
-        val PAGE_TYPE = AlbumListType.ALPHABETICAL_BY_NAME
         const val PAGE_SIZE = 100
     }
 }

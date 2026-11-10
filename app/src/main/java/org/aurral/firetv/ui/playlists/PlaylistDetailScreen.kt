@@ -11,7 +11,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -35,6 +38,7 @@ import org.aurral.firetv.ui.components.ConfirmDialog
 import org.aurral.firetv.ui.components.CoverArt
 import org.aurral.firetv.ui.components.FocusHighlight
 import org.aurral.firetv.ui.components.PlayActionButtons
+import org.aurral.firetv.ui.components.RowIconButton
 import org.aurral.firetv.ui.components.SongRow
 import org.aurral.firetv.ui.components.TextInputDialog
 import org.aurral.firetv.ui.player.PlayerViewModel
@@ -89,7 +93,27 @@ fun PlaylistDetailScreen(
                     isPlaying = song.id == playback.currentSongId,
                     isStarred = song.starred,
                     onClick = { viewModel.playFrom(index) },
-                    onRemove = { viewModel.removeAt(index) },
+                    trailing = {
+                        Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                            RowIconButton(
+                                imageVector = Icons.Filled.KeyboardArrowUp,
+                                contentDescription = "Move up",
+                                onClick = { viewModel.moveTrack(index, index - 1) },
+                                enabled = index > 0,
+                            )
+                            RowIconButton(
+                                imageVector = Icons.Filled.KeyboardArrowDown,
+                                contentDescription = "Move down",
+                                onClick = { viewModel.moveTrack(index, index + 1) },
+                                enabled = index < detail.playlist.songs.lastIndex,
+                            )
+                            RowIconButton(
+                                imageVector = Icons.Filled.DeleteOutline,
+                                contentDescription = "Remove from playlist",
+                                onClick = { viewModel.removeAt(index) },
+                            )
+                        }
+                    },
                 )
             }
         }

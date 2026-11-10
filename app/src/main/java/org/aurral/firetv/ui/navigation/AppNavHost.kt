@@ -22,6 +22,7 @@ import org.aurral.firetv.ui.playlists.PlaylistDetailScreen
 import org.aurral.firetv.ui.playlists.PlaylistsScreen
 import org.aurral.firetv.ui.search.SearchScreen
 import org.aurral.firetv.ui.settings.SettingsScreen
+import org.aurral.firetv.ui.songs.SongsScreen
 
 @Composable
 fun AppNavHost(
@@ -44,6 +45,9 @@ fun AppNavHost(
                 onOpenAlbum = { navController.navigate(Routes.albumDetail(it)) },
                 onOpenArtist = { navController.navigate(Routes.artistDetail(it)) },
             )
+        }
+        composable(AppDestination.SONGS.route) {
+            SongsScreen()
         }
         composable(AppDestination.ARTISTS.route) {
             ArtistsScreen(onOpenArtist = { navController.navigate(Routes.artistDetail(it)) })

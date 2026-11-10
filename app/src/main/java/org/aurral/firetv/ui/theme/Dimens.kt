@@ -12,7 +12,7 @@ object Dimens {
     val RowCoverArt = 36.dp
     val CardWidth = 148.dp
     val MiniPlayerHeight = 64.dp
-    val NavRailWidth = 72.dp
-    val NavRailItemHeight = 60.dp
+    val NavRailWidth = 80.dp
+    val NavRailItemHeight = 50.dp
     val CornerRadius = 8.dp
 }

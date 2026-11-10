@@ -5,17 +5,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DeleteOutline
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.StarBorder
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,7 +32,7 @@ import org.aurral.firetv.ui.theme.Accent
 import org.aurral.firetv.ui.theme.Dimens
 import org.aurral.firetv.ui.theme.SurfaceVariant
 
-/** A focusable track row with cover art, for vertical track lists. */
+/** A focusable track row with cover art and an optional trailing action slot. */
 @Composable
 fun SongRow(
     title: String,
@@ -47,7 +44,7 @@ fun SongRow(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     onToggleStar: (() -> Unit)? = null,
-    onRemove: (() -> Unit)? = null,
+    trailing: @Composable (RowScope.() -> Unit)? = null,
 ) {
     var focused by remember { mutableStateOf(false) }
     val background = when {
@@ -63,9 +60,9 @@ fun SongRow(
             .background(background)
             .onFocusChanged { focused = it.isFocused }
             .clickable(onClick = onClick)
-            .padding(horizontal = 12.dp, vertical = 6.dp),
+            .padding(horizontal = 12.dp, vertical = 5.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         CoverArt(
             coverArtId = coverArtId,
@@ -92,25 +89,13 @@ fun SongRow(
             }
         }
         if (onToggleStar != null) {
-            IconButton(onClick = onToggleStar, modifier = Modifier.size(32.dp)) {
-                Icon(
-                    imageVector = if (isStarred) Icons.Filled.Star else Icons.Outlined.StarBorder,
-                    contentDescription = if (isStarred) "Unstar" else "Star",
-                    tint = if (isStarred) Accent else MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(Dimens.Icon),
-                )
-            }
+            RowIconButton(
+                imageVector = if (isStarred) Icons.Filled.Star else Icons.Outlined.StarBorder,
+                contentDescription = if (isStarred) "Unstar" else "Star",
+                onClick = onToggleStar,
+            )
         }
-        if (onRemove != null) {
-            IconButton(onClick = onRemove, modifier = Modifier.size(32.dp)) {
-                Icon(
-                    imageVector = Icons.Filled.DeleteOutline,
-                    contentDescription = "Remove",
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(Dimens.Icon),
-                )
-            }
-        }
+        trailing?.invoke(this)
         Text(
             text = formatDuration(durationSeconds),
             style = MaterialTheme.typography.bodyMedium,

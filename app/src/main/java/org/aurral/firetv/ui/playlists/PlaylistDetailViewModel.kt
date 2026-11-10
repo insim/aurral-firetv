@@ -55,15 +55,38 @@ class PlaylistDetailViewModel @Inject constructor(
         playbackController.playSongs(songs, shuffle = true)
     }
 
-    private fun currentSongs(): List<Song>? =
-        (_state.value as? LoadState.Data)?.value?.playlist?.songs?.takeIf { it.isNotEmpty() }
-
     fun removeAt(index: Int) {
         viewModelScope.launch {
             runCatching { playlistRepository.removeSongAt(playlistId, index) }.fold(
                 onSuccess = { load() },
                 onFailure = { error -> setError(error.toUserMessage()) },
             )
+        }
+    }
+
+    /**
+     * Moves a track by rewriting the playlist in the new order — Subsonic has no
+     * move operation, and removal plus append cannot express a reinsertion.
+     */
+    fun moveTrack(fromIndex: Int, toIndex: Int) {
+        val current = _state.value as? LoadState.Data ?: return
+        val songs = current.value.playlist.songs
+        if (fromIndex !in songs.indices || toIndex !in songs.indices || fromIndex == toIndex) return
+
+        val reordered = songs.toMutableList()
+        val moved = reordered.removeAt(fromIndex)
+        reordered.add(toIndex, moved)
+
+        _state.value = LoadState.Data(
+            current.value.copy(playlist = current.value.playlist.copy(songs = reordered)),
+        )
+
+        viewModelScope.launch {
+            runCatching { playlistRepository.replaceSongs(playlistId, reordered.map { it.id }) }
+                .onFailure { error ->
+                    setError(error.toUserMessage())
+                    load()
+                }
         }
     }
 
@@ -91,6 +114,9 @@ class PlaylistDetailViewModel @Inject constructor(
             if (current is LoadState.Data) LoadState.Data(current.value.copy(errorMessage = null)) else current
         }
     }
+
+    private fun currentSongs(): List<Song>? =
+        (_state.value as? LoadState.Data)?.value?.playlist?.songs?.takeIf { it.isNotEmpty() }
 
     private fun setError(message: String) {
         _state.update { current ->

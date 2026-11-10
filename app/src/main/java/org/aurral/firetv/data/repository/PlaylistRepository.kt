@@ -43,6 +43,16 @@ class PlaylistRepository @Inject constructor(
         api.updatePlaylist(playlistId = playlistId, songIdsToAdd = songIds).orThrow()
     }
 
+    /**
+     * Replaces the playlist's entire contents with [songIds].
+     *
+     * Subsonic has no move/reorder operation, so reordering is expressed by
+     * rewriting the playlist in the new order.
+     */
+    suspend fun replaceSongs(playlistId: String, songIds: List<String>) {
+        api.replacePlaylistSongs(playlistId, songIds).orThrow()
+    }
+
     /** Removes the song at [index] (position within the last loaded playlist). */
     suspend fun removeSongAt(playlistId: String, index: Int) {
         api.updatePlaylist(playlistId = playlistId, songIndexesToRemove = listOf(index)).orThrow()

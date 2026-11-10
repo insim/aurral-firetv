@@ -14,9 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.aurral.firetv.data.model.ArtistSort
 import org.aurral.firetv.ui.common.LoadStateListContent
 import org.aurral.firetv.ui.components.MediaCard
 import org.aurral.firetv.ui.components.SectionHeader
+import org.aurral.firetv.ui.components.SortSelector
 import org.aurral.firetv.ui.theme.Dimens
 
 @Composable
@@ -25,9 +27,17 @@ fun ArtistsScreen(
     viewModel: ArtistsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val sort by viewModel.sort.collectAsStateWithLifecycle()
 
-    Column(modifier = Modifier.fillMaxSize().padding(top = 24.dp)) {
+    Column(modifier = Modifier.fillMaxSize().padding(top = 16.dp)) {
         SectionHeader(title = "Artists")
+        SortSelector(
+            options = ArtistSort.entries,
+            selected = sort,
+            labelOf = { it.label },
+            onSelect = viewModel::setSort,
+            modifier = Modifier.padding(horizontal = Dimens.ScreenPadding, vertical = 4.dp),
+        )
         LoadStateListContent(
             state = state,
             onRetry = viewModel::load,

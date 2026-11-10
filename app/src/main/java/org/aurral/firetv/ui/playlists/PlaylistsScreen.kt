@@ -4,6 +4,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
@@ -18,14 +21,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import org.aurral.firetv.data.model.Playlist
+import org.aurral.firetv.data.model.PlaylistSort
 import org.aurral.firetv.ui.common.LoadStateListContent
 import org.aurral.firetv.ui.common.formatDuration
 import org.aurral.firetv.ui.components.ActionRow
 import org.aurral.firetv.ui.components.FocusHighlight
 import org.aurral.firetv.ui.components.SectionHeader
+import org.aurral.firetv.ui.components.SortSelector
 import org.aurral.firetv.ui.components.TextInputDialog
 import org.aurral.firetv.ui.theme.Dimens
 
@@ -35,15 +38,27 @@ fun PlaylistsScreen(
     viewModel: PlaylistsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val sort by viewModel.sort.collectAsStateWithLifecycle()
     var showCreateDialog by remember { mutableStateOf(false) }
 
-    Column(modifier = Modifier.fillMaxSize().padding(top = 24.dp)) {
+    Column(modifier = Modifier.fillMaxSize().padding(top = 16.dp)) {
         SectionHeader(title = "Playlists")
+        SortSelector(
+            options = PlaylistSort.entries,
+            selected = sort,
+            labelOf = { it.label },
+            onSelect = viewModel::setSort,
+            modifier = Modifier.padding(horizontal = Dimens.ScreenPadding, vertical = 4.dp),
+        )
 
-        FocusHighlight(modifier = Modifier.padding(start = 32.dp, bottom = 8.dp)) {
+        FocusHighlight(modifier = Modifier.padding(start = Dimens.ScreenPadding, top = 4.dp, bottom = 4.dp)) {
             Button(onClick = { showCreateDialog = true }) {
-                Icon(Icons.Filled.Add, contentDescription = null)
-                Text(text = "New playlist", modifier = Modifier.padding(start = 8.dp))
+                Icon(
+                    imageVector = Icons.Filled.Add,
+                    contentDescription = null,
+                    modifier = Modifier.size(Dimens.Icon),
+                )
+                Text(text = "New playlist", modifier = Modifier.padding(start = 6.dp))
             }
         }
 

@@ -25,8 +25,8 @@ fun AppNavRail(
             .fillMaxHeight()
             .width(Dimens.NavRailWidth)
             .background(Background)
-            .padding(vertical = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
+            .padding(vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(3.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         AppDestination.entries.forEach { destination ->

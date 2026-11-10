@@ -92,6 +92,13 @@ interface SubsonicApi {
         @Query("songId") songIds: List<String> = emptyList(),
     ): SubsonicEnvelope
 
+    /** Replaces an existing playlist's contents, which is how Subsonic expresses reordering. */
+    @GET("createPlaylist.view")
+    suspend fun replacePlaylistSongs(
+        @Query("playlistId") playlistId: String,
+        @Query("songId") songIds: List<String>,
+    ): SubsonicEnvelope
+
     @GET("updatePlaylist.view")
     suspend fun updatePlaylist(
         @Query("playlistId") playlistId: String,
