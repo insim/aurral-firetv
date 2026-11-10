@@ -21,6 +21,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.aurral.firetv.ui.common.LoadStateListContent
 import org.aurral.firetv.ui.components.MediaCard
 import org.aurral.firetv.ui.components.SectionHeader
+import org.aurral.firetv.ui.theme.Dimens
 
 private const val LOAD_MORE_DISTANCE = 20
 
@@ -55,12 +56,12 @@ fun AlbumsScreen(
             }
 
             LazyVerticalGrid(
-                columns = GridCells.Adaptive(minSize = 160.dp),
+                columns = GridCells.Adaptive(minSize = 132.dp),
                 state = gridState,
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalArrangement = Arrangement.spacedBy(20.dp),
+                contentPadding = PaddingValues(horizontal = Dimens.ScreenPadding, vertical = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(14.dp),
             ) {
                 items(albums, key = { it.id }) { album ->
                     MediaCard(

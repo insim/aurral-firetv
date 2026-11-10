@@ -27,6 +27,7 @@ import org.aurral.firetv.ui.components.ActionRow
 import org.aurral.firetv.ui.components.FocusHighlight
 import org.aurral.firetv.ui.components.SectionHeader
 import org.aurral.firetv.ui.components.TextInputDialog
+import org.aurral.firetv.ui.theme.Dimens
 
 @Composable
 fun PlaylistsScreen(
@@ -53,12 +54,13 @@ fun PlaylistsScreen(
         ) { playlists ->
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(horizontal = 32.dp, vertical = 8.dp),
+                contentPadding = PaddingValues(horizontal = Dimens.ScreenPadding, vertical = 4.dp),
             ) {
                 items(playlists, key = { it.id }) { playlist ->
                     ActionRow(
                         title = playlist.name,
                         subtitle = playlistSubtitle(playlist),
+                        coverArtId = playlist.coverArtId,
                         onClick = { onOpenPlaylist(playlist.id) },
                     )
                 }

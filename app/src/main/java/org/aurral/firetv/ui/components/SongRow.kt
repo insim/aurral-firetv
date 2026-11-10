@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DeleteOutline
@@ -27,18 +27,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.aurral.firetv.ui.common.formatDuration
 import org.aurral.firetv.ui.theme.Accent
+import org.aurral.firetv.ui.theme.Dimens
 import org.aurral.firetv.ui.theme.SurfaceVariant
 
-/** A focusable track row for vertical track lists. */
+/** A focusable track row with cover art, for vertical track lists. */
 @Composable
 fun SongRow(
-    position: Int,
     title: String,
     subtitle: String?,
+    coverArtId: String?,
     durationSeconds: Int,
     isPlaying: Boolean,
     isStarred: Boolean,
@@ -51,38 +53,31 @@ fun SongRow(
     val background = when {
         isPlaying -> Accent.copy(alpha = 0.22f)
         focused -> SurfaceVariant
-        else -> androidx.compose.ui.graphics.Color.Transparent
+        else -> Color.Transparent
     }
 
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(6.dp))
             .background(background)
             .onFocusChanged { focused = it.isFocused }
             .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+            .padding(horizontal = 12.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Text(
-            text = position.toString(),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.width(28.dp),
+        CoverArt(
+            coverArtId = coverArtId,
+            modifier = Modifier.size(Dimens.RowCoverArt),
+            requestSizePx = 120,
+            placeholderIconSize = Dimens.IconSmall,
         )
-        if (isPlaying) {
-            Icon(
-                imageVector = Icons.Filled.PlayArrow,
-                contentDescription = "Now playing",
-                tint = Accent,
-            )
-        }
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = if (isPlaying) Accent else MaterialTheme.colorScheme.onSurface,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
@@ -97,20 +92,22 @@ fun SongRow(
             }
         }
         if (onToggleStar != null) {
-            IconButton(onClick = onToggleStar) {
+            IconButton(onClick = onToggleStar, modifier = Modifier.size(32.dp)) {
                 Icon(
                     imageVector = if (isStarred) Icons.Filled.Star else Icons.Outlined.StarBorder,
                     contentDescription = if (isStarred) "Unstar" else "Star",
                     tint = if (isStarred) Accent else MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(Dimens.Icon),
                 )
             }
         }
         if (onRemove != null) {
-            IconButton(onClick = onRemove) {
+            IconButton(onClick = onRemove, modifier = Modifier.size(32.dp)) {
                 Icon(
                     imageVector = Icons.Filled.DeleteOutline,
-                    contentDescription = "Remove from playlist",
+                    contentDescription = "Remove",
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(Dimens.Icon),
                 )
             }
         }

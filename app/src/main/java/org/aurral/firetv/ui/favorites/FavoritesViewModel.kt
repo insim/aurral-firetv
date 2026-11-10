@@ -39,9 +39,17 @@ class FavoritesViewModel @Inject constructor(
     }
 
     fun playFrom(startIndex: Int) {
-        val songs = (_state.value as? LoadState.Data)?.value?.songs ?: return
+        val songs = currentSongs() ?: return
         playbackController.playSongs(songs, startIndex)
     }
+
+    fun playShuffled() {
+        val songs = currentSongs() ?: return
+        playbackController.playSongs(songs, shuffle = true)
+    }
+
+    private fun currentSongs(): List<Song>? =
+        (_state.value as? LoadState.Data)?.value?.songs?.takeIf { it.isNotEmpty() }
 
     fun toggleSongStar(song: Song) {
         viewModelScope.launch {

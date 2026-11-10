@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.aurral.firetv.data.model.Song
 import org.aurral.firetv.data.repository.LibraryRepository
+import org.aurral.firetv.data.repository.MixRepository
 import org.aurral.firetv.playback.PlaybackController
 import org.aurral.firetv.ui.common.LoadState
 import org.aurral.firetv.ui.common.toUserMessage
@@ -20,6 +21,7 @@ import javax.inject.Inject
 class ArtistDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val libraryRepository: LibraryRepository,
+    private val mixRepository: MixRepository,
     private val playbackController: PlaybackController,
 ) : ViewModel() {
 
@@ -46,7 +48,24 @@ class ArtistDetailViewModel @Inject constructor(
         }
     }
 
-    fun playSongs(songs: List<Song>, startIndex: Int) {
+    fun playFrom(startIndex: Int) {
+        val songs = topSongs() ?: return
         playbackController.playSongs(songs, startIndex)
     }
+
+    fun playShuffled() {
+        val songs = topSongs() ?: return
+        playbackController.playSongs(songs, shuffle = true)
+    }
+
+    /** Shuffled artist catalogue, seeded with their most played tracks. */
+    fun playRadio() {
+        viewModelScope.launch {
+            val songs = runCatching { mixRepository.artistRadio(artistId) }.getOrDefault(emptyList())
+            if (songs.isNotEmpty()) playbackController.playSongs(songs, shuffle = true)
+        }
+    }
+
+    private fun topSongs(): List<Song>? =
+        (_state.value as? LoadState.Data)?.value?.topSongs?.takeIf { it.isNotEmpty() }
 }

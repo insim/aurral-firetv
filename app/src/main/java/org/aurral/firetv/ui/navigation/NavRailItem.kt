@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.aurral.firetv.ui.theme.Accent
+import org.aurral.firetv.ui.theme.Dimens
 import org.aurral.firetv.ui.theme.OnSurfaceMuted
 import org.aurral.firetv.ui.theme.SurfaceVariant
 
@@ -48,13 +49,13 @@ fun NavRailItem(
 
     Column(
         modifier = modifier
-            .width(88.dp)
-            .height(72.dp)
-            .clip(RoundedCornerShape(12.dp))
+            .width(Dimens.NavRailWidth - 8.dp)
+            .height(Dimens.NavRailItemHeight)
+            .clip(RoundedCornerShape(Dimens.CornerRadius))
             .background(background)
             .onFocusChanged { focused = it.isFocused }
             .clickable(onClick = onClick)
-            .padding(vertical = 8.dp),
+            .padding(vertical = 6.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -62,14 +63,14 @@ fun NavRailItem(
             imageVector = destination.icon,
             contentDescription = destination.label,
             tint = tint,
-            modifier = Modifier.size(24.dp),
+            modifier = Modifier.size(Dimens.Icon),
         )
         Text(
             text = destination.label,
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodySmall,
             color = tint,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 4.dp),
+            modifier = Modifier.padding(top = 2.dp),
         )
     }
 }

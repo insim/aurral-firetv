@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.aurral.firetv.ui.theme.Background
+import org.aurral.firetv.ui.theme.Dimens
 
 /** Vertical icon rail for the top-level destinations. */
 @Composable
@@ -22,10 +23,10 @@ fun AppNavRail(
     Column(
         modifier = modifier
             .fillMaxHeight()
-            .width(112.dp)
+            .width(Dimens.NavRailWidth)
             .background(Background)
-            .padding(vertical = 24.dp),
-        verticalArrangement = Arrangement.spacedBy(6.dp),
+            .padding(vertical = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         AppDestination.entries.forEach { destination ->

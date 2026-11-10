@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.aurral.firetv.data.model.Song
 import org.aurral.firetv.data.repository.PlaylistRepository
 import org.aurral.firetv.playback.PlaybackController
 import org.aurral.firetv.ui.common.LoadState
@@ -45,9 +46,17 @@ class PlaylistDetailViewModel @Inject constructor(
     }
 
     fun playFrom(startIndex: Int) {
-        val songs = (_state.value as? LoadState.Data)?.value?.playlist?.songs ?: return
+        val songs = currentSongs() ?: return
         playbackController.playSongs(songs, startIndex)
     }
+
+    fun playShuffled() {
+        val songs = currentSongs() ?: return
+        playbackController.playSongs(songs, shuffle = true)
+    }
+
+    private fun currentSongs(): List<Song>? =
+        (_state.value as? LoadState.Data)?.value?.playlist?.songs?.takeIf { it.isNotEmpty() }
 
     fun removeAt(index: Int) {
         viewModelScope.launch {

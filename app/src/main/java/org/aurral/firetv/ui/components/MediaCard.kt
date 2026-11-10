@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import org.aurral.firetv.ui.theme.Dimens
 
 /** Cover art with a title and optional subtitle, the primary browsing tile. */
 @Composable
@@ -21,32 +22,33 @@ fun MediaCard(
     coverArtId: String?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    width: Dp = 176.dp,
+    width: Dp = Dimens.CardWidth,
 ) {
     Column(modifier = modifier.width(width)) {
         FocusableCard(
             onClick = onClick,
             modifier = Modifier.fillMaxWidth(),
-            cornerRadius = 10.dp,
+            cornerRadius = Dimens.CornerRadius,
         ) {
             CoverArt(
                 coverArtId = coverArtId,
                 modifier = Modifier.fillMaxWidth().aspectRatio(1f),
-                requestSizePx = 400,
+                requestSizePx = 360,
+                placeholderIconSize = Dimens.IconLarge,
             )
         }
         Text(
             text = title,
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.titleSmall,
             color = MaterialTheme.colorScheme.onSurface,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(top = 10.dp),
+            modifier = Modifier.padding(top = 6.dp),
         )
         if (!subtitle.isNullOrBlank()) {
             Text(
                 text = subtitle,
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

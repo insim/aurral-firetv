@@ -51,8 +51,13 @@ class AlbumDetailViewModel @Inject constructor(
     }
 
     fun playFrom(startIndex: Int) {
-        val songs = (_state.value as? LoadState.Data)?.value?.album?.songs ?: return
+        val songs = currentSongs() ?: return
         playbackController.playSongs(songs, startIndex)
+    }
+
+    fun playShuffled() {
+        val songs = currentSongs() ?: return
+        playbackController.playSongs(songs, shuffle = true)
     }
 
     fun toggleSongStar(song: Song) {
@@ -89,6 +94,9 @@ class AlbumDetailViewModel @Inject constructor(
 
     private fun currentSongIds(): List<String>? =
         (_state.value as? LoadState.Data)?.value?.album?.songs?.map { it.id }
+
+    private fun currentSongs(): List<Song>? =
+        (_state.value as? LoadState.Data)?.value?.album?.songs?.takeIf { it.isNotEmpty() }
 
     private fun applyStar(songId: String, starred: Boolean) {
         val current = _state.value as? LoadState.Data ?: return

@@ -104,11 +104,11 @@ fun SearchScreen(
             }
             if (results.songs.isNotEmpty()) {
                 item { SectionHeader(title = "Tracks") }
-                itemsIndexed(results.songs, key = { _, song -> song.id }) { index, song ->
+                itemsIndexed(results.songs, key = { _, song -> song.id }) { _, song ->
                     SongRow(
-                        position = index + 1,
                         title = song.title,
                         subtitle = song.artist,
+                        coverArtId = song.coverArtId,
                         durationSeconds = song.durationSeconds,
                         isPlaying = false,
                         isStarred = song.starred,

@@ -7,6 +7,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -24,15 +27,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import org.aurral.firetv.playback.QueueItem
 import org.aurral.firetv.ui.common.formatDurationMs
+import org.aurral.firetv.ui.components.CoverArt
 import org.aurral.firetv.ui.components.EmptyState
 import org.aurral.firetv.ui.components.FocusableCard
 import org.aurral.firetv.ui.components.SectionHeader
 import org.aurral.firetv.ui.player.PlayerViewModel
 import org.aurral.firetv.ui.theme.Accent
+import org.aurral.firetv.ui.theme.Dimens
 
 @Composable
 fun QueueScreen(viewModel: PlayerViewModel = hiltViewModel()) {
@@ -45,7 +48,7 @@ fun QueueScreen(viewModel: PlayerViewModel = hiltViewModel()) {
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(top = 24.dp, bottom = 32.dp),
+        contentPadding = PaddingValues(bottom = Dimens.ScreenPadding),
     ) {
         item { SectionHeader(title = "Queue", subtitle = "${state.queue.size} tracks") }
         itemsIndexed(state.queue, key = { _, item -> item.id }) { index, item ->
@@ -76,26 +79,28 @@ private fun QueueRow(
 ) {
     FocusableCard(
         onClick = onClick,
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp, vertical = 4.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = Dimens.ScreenPadding, vertical = 2.dp),
         focusedScale = 1.01f,
+        cornerRadius = 6.dp,
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            if (isCurrent) {
-                Icon(
-                    imageVector = Icons.Filled.PlayArrow,
-                    contentDescription = "Now playing",
-                    tint = Accent,
-                )
-            }
+            CoverArt(
+                coverArtId = item.coverArtId,
+                modifier = Modifier.size(Dimens.RowCoverArt),
+                requestSizePx = 120,
+                placeholderIconSize = Dimens.IconSmall,
+            )
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = item.title,
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = if (isCurrent) Accent else MaterialTheme.colorScheme.onSurface,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -107,19 +112,39 @@ private fun QueueRow(
                     overflow = TextOverflow.Ellipsis,
                 )
             }
+            if (isCurrent) {
+                Icon(
+                    imageVector = Icons.Filled.PlayArrow,
+                    contentDescription = "Now playing",
+                    tint = Accent,
+                    modifier = Modifier.size(Dimens.Icon),
+                )
+            }
             Text(
                 text = formatDurationMs(item.durationMs),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            IconButton(onClick = onMoveUp, enabled = canMoveUp) {
-                Icon(Icons.Filled.KeyboardArrowUp, contentDescription = "Move up")
+            IconButton(onClick = onMoveUp, enabled = canMoveUp, modifier = Modifier.size(32.dp)) {
+                Icon(
+                    Icons.Filled.KeyboardArrowUp,
+                    contentDescription = "Move up",
+                    modifier = Modifier.size(Dimens.Icon),
+                )
             }
-            IconButton(onClick = onMoveDown, enabled = canMoveDown) {
-                Icon(Icons.Filled.KeyboardArrowDown, contentDescription = "Move down")
+            IconButton(onClick = onMoveDown, enabled = canMoveDown, modifier = Modifier.size(32.dp)) {
+                Icon(
+                    Icons.Filled.KeyboardArrowDown,
+                    contentDescription = "Move down",
+                    modifier = Modifier.size(Dimens.Icon),
+                )
             }
-            IconButton(onClick = onRemove) {
-                Icon(Icons.Filled.Delete, contentDescription = "Remove from queue")
+            IconButton(onClick = onRemove, modifier = Modifier.size(32.dp)) {
+                Icon(
+                    Icons.Filled.Delete,
+                    contentDescription = "Remove from queue",
+                    modifier = Modifier.size(Dimens.Icon),
+                )
             }
         }
     }

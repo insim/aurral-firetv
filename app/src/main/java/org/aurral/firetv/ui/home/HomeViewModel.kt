@@ -11,8 +11,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.aurral.firetv.data.model.AlbumListType
+import org.aurral.firetv.data.model.Song
 import org.aurral.firetv.data.repository.LibraryRepository
+import org.aurral.firetv.data.repository.MixRepository
 import org.aurral.firetv.data.repository.PlaylistRepository
+import org.aurral.firetv.playback.PlaybackController
 import org.aurral.firetv.ui.common.LoadState
 import org.aurral.firetv.ui.common.toUserMessage
 import javax.inject.Inject
@@ -21,6 +24,8 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val libraryRepository: LibraryRepository,
     private val playlistRepository: PlaylistRepository,
+    private val mixRepository: MixRepository,
+    private val playbackController: PlaybackController,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<LoadState<HomeUiState>>(LoadState.Loading)
@@ -46,6 +51,21 @@ class HomeViewModel @Inject constructor(
                 onSuccess = { LoadState.Data(it) },
                 onFailure = { LoadState.Error(it.toUserMessage()) },
             )
+        }
+    }
+
+    fun shuffleLibrary() {
+        playMix { mixRepository.shuffledLibrary() }
+    }
+
+    fun playBlendedMix() {
+        playMix { mixRepository.blended() }
+    }
+
+    private fun playMix(build: suspend () -> List<Song>) {
+        viewModelScope.launch {
+            val songs = runCatching { build() }.getOrDefault(emptyList())
+            if (songs.isNotEmpty()) playbackController.playSongs(songs, shuffle = true)
         }
     }
 }

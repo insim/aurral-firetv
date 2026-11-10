@@ -109,11 +109,12 @@ class PlaybackController @Inject constructor(
 
     // region commands
 
-    fun playSongs(songs: List<Song>, startIndex: Int = 0) {
+    fun playSongs(songs: List<Song>, startIndex: Int = 0, shuffle: Boolean = false) {
         val mediaController = controller ?: return
         if (songs.isEmpty()) return
         val items = songs.map { it.toMediaItem(urlBuilder) }
         mediaController.setMediaItems(items, startIndex.coerceIn(0, items.lastIndex), 0L)
+        mediaController.shuffleModeEnabled = shuffle
         mediaController.prepare()
         mediaController.play()
         persistQueueDebounced()

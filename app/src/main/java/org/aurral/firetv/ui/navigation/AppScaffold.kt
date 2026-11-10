@@ -17,6 +17,9 @@ import androidx.navigation.compose.rememberNavController
 import org.aurral.firetv.ui.components.MiniPlayerBar
 import org.aurral.firetv.ui.theme.Background
 
+/** Routes that already show the full player, so the mini bar is redundant there. */
+private val FULL_PLAYER_ROUTES = setOf(Routes.NOW_PLAYING, Routes.QUEUE)
+
 /** Root layout: nav rail, the current screen, and the persistent mini player. */
 @Composable
 fun AppScaffold() {
@@ -33,7 +36,12 @@ fun AppScaffold() {
             Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
                 AppNavHost(navController = navController)
             }
-            MiniPlayerBar(onOpenNowPlaying = { navController.navigate(Routes.NOW_PLAYING) })
+            if (currentRoute !in FULL_PLAYER_ROUTES) {
+                MiniPlayerBar(
+                    onOpenNowPlaying = { navController.navigate(Routes.NOW_PLAYING) },
+                    onOpenQueue = { navController.navigate(Routes.QUEUE) },
+                )
+            }
         }
     }
 }

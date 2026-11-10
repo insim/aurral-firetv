@@ -7,6 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.aurral.firetv.ui.theme.Dimens
 
 @Composable
 fun SectionHeader(
@@ -14,7 +15,7 @@ fun SectionHeader(
     subtitle: String? = null,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier.padding(horizontal = 32.dp, vertical = 8.dp)) {
+    Column(modifier = modifier.padding(horizontal = Dimens.ScreenPadding, vertical = 6.dp)) {
         Text(
             text = title,
             style = MaterialTheme.typography.headlineMedium,

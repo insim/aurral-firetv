@@ -3,18 +3,20 @@ package org.aurral.firetv.ui.genres
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.aurral.firetv.ui.common.LoadStateListContent
+import org.aurral.firetv.ui.components.PlayActionButtons
 import org.aurral.firetv.ui.components.SectionHeader
 import org.aurral.firetv.ui.components.SongRow
 import org.aurral.firetv.ui.player.PlayerViewModel
+import org.aurral.firetv.ui.theme.Dimens
 
 @Composable
 fun GenreDetailScreen(
@@ -32,14 +34,21 @@ fun GenreDetailScreen(
     ) { songs ->
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 32.dp),
+            contentPadding = PaddingValues(bottom = Dimens.ScreenPadding),
         ) {
             item { SectionHeader(title = viewModel.genreName, subtitle = "${songs.size} songs") }
+            item {
+                PlayActionButtons(
+                    onPlayAll = { viewModel.playFrom(0) },
+                    onShuffle = viewModel::playShuffled,
+                    modifier = Modifier.padding(horizontal = Dimens.ScreenPadding, vertical = 6.dp),
+                )
+            }
             itemsIndexed(songs, key = { _, song -> song.id }) { index, song ->
                 SongRow(
-                    position = index + 1,
                     title = song.title,
                     subtitle = song.artist,
+                    coverArtId = song.coverArtId,
                     durationSeconds = song.durationSeconds,
                     isPlaying = song.id == playback.currentSongId,
                     isStarred = song.starred,

@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.aurral.firetv.ui.theme.Dimens
 
 /** A titled, horizontally scrolling row of cards for TV. */
 @Composable
@@ -22,11 +23,11 @@ fun <T> MediaCarousel(
     itemContent: @Composable (T) -> Unit,
 ) {
     if (items.isEmpty()) return
-    Column(modifier = modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+    Column(modifier = modifier.fillMaxWidth().padding(vertical = 4.dp)) {
         SectionHeader(title = title, subtitle = subtitle)
         LazyRow(
-            contentPadding = PaddingValues(horizontal = 32.dp, vertical = 12.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(horizontal = Dimens.ScreenPadding, vertical = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             items(items = items, key = key) { item -> itemContent(item) }
         }

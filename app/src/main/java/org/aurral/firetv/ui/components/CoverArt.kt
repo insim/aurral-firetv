@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import org.aurral.firetv.playback.artworkCacheKey
+import org.aurral.firetv.ui.theme.Dimens
 import org.aurral.firetv.ui.theme.OnSurfaceMuted
 import org.aurral.firetv.ui.theme.SurfaceVariant
 
@@ -31,11 +32,11 @@ fun CoverArt(
     coverArtId: String?,
     modifier: Modifier = Modifier,
     requestSizePx: Int = 400,
-    placeholderIconSize: Dp = 40.dp,
+    placeholderIconSize: Dp = Dimens.Icon,
 ) {
     val url = rememberCoverArtUrl(coverArtId, requestSizePx)
     val cacheKey = coverArtId?.let { artworkCacheKey(it, requestSizePx) }
-    val shape = RoundedCornerShape(10.dp)
+    val shape = RoundedCornerShape(Dimens.CornerRadius)
 
     Box(
         modifier = modifier.clip(shape).background(SurfaceVariant),

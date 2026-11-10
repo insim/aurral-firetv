@@ -36,6 +36,7 @@ fun AppNavHost(
         composable(AppDestination.HOME.route) {
             HomeScreen(
                 onOpenAlbum = { navController.navigate(Routes.albumDetail(it)) },
+                onOpenPlaylist = { navController.navigate(Routes.playlistDetail(it)) },
             )
         }
         composable(AppDestination.SEARCH.route) {
