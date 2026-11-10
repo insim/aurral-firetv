@@ -40,7 +40,10 @@ class ArtistDetailViewModel @Inject constructor(
             _state.value = runCatching {
                 val artist = libraryRepository.artist(artistId)
                 val topSongs = runCatching { libraryRepository.topSongs(artistId) }.getOrDefault(emptyList())
-                ArtistDetailUiState(artist = artist, topSongs = topSongs)
+                val bio = runCatching { libraryRepository.artistBio(artistId)?.biography }
+                    .getOrNull()
+                    .orEmpty()
+                ArtistDetailUiState(artist = artist, topSongs = topSongs, bio = bio)
             }.fold(
                 onSuccess = { LoadState.Data(it) },
                 onFailure = { LoadState.Error(it.toUserMessage()) },

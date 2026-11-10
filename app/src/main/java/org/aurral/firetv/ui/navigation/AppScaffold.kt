@@ -40,6 +40,7 @@ fun AppScaffold() {
                 MiniPlayerBar(
                     onOpenNowPlaying = { navController.navigate(Routes.NOW_PLAYING) },
                     onOpenQueue = { navController.navigate(Routes.QUEUE) },
+                    onOpenLyrics = { songId -> navController.navigate(Routes.lyrics(songId)) },
                 )
             }
         }

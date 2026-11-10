@@ -20,7 +20,7 @@ import org.aurral.firetv.ui.common.LoadStateListContent
 import org.aurral.firetv.ui.components.PlayActionButtons
 import org.aurral.firetv.ui.components.SectionHeader
 import org.aurral.firetv.ui.components.SongRow
-import org.aurral.firetv.ui.components.SortSelector
+import org.aurral.firetv.ui.components.SortMenu
 import org.aurral.firetv.ui.player.PlayerViewModel
 import org.aurral.firetv.ui.theme.Dimens
 
@@ -71,12 +71,12 @@ fun SongsScreen(
                 )
             }
             item {
-                SortSelector(
+                SortMenu(
                     options = SongSort.entries,
                     selected = sort,
                     labelOf = { it.label },
                     onSelect = viewModel::setSort,
-                    modifier = Modifier.padding(horizontal = Dimens.ScreenPadding, vertical = 4.dp),
+                    modifier = Modifier.padding(start = Dimens.ScreenPadding, top = 4.dp),
                 )
             }
             item {

@@ -33,6 +33,15 @@ interface SubsonicApi {
     @GET("getAlbum.view")
     suspend fun getAlbum(@Query("id") id: String): SubsonicEnvelope
 
+    @GET("getSong.view")
+    suspend fun getSong(@Query("id") id: String): SubsonicEnvelope
+
+    @GET("getArtistInfo2.view")
+    suspend fun getArtistInfo2(
+        @Query("id") id: String,
+        @Query("count") count: Int = 10,
+    ): SubsonicEnvelope
+
     @GET("getTopSongs.view")
     suspend fun getTopSongs(
         @Query("id") id: String,
@@ -112,6 +121,12 @@ interface SubsonicApi {
 
     @GET("getLyricsBySongId.view")
     suspend fun getLyricsBySongId(@Query("id") id: String): SubsonicEnvelope
+
+    @GET("getLyrics.view")
+    suspend fun getLyrics(
+        @Query("artist") artist: String,
+        @Query("title") title: String,
+    ): SubsonicEnvelope
 
     @GET("scrobble.view")
     suspend fun scrobble(

@@ -59,7 +59,12 @@ fun LyricsScreen(
             item {
                 SectionHeader(
                     title = "Lyrics",
-                    subtitle = if (lyrics.synced) "Synced" else null,
+                    subtitle = buildList {
+                        if (playback.currentSongId == songId && playback.title.isNotBlank()) {
+                            add(playback.title)
+                        }
+                        if (lyrics.synced) add("Synced")
+                    }.joinToString(" · ").ifBlank { null },
                 )
             }
             itemsIndexed(lyrics.lines) { index, line ->

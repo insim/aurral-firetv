@@ -18,7 +18,7 @@ import org.aurral.firetv.data.model.ArtistSort
 import org.aurral.firetv.ui.common.LoadStateListContent
 import org.aurral.firetv.ui.components.MediaCard
 import org.aurral.firetv.ui.components.SectionHeader
-import org.aurral.firetv.ui.components.SortSelector
+import org.aurral.firetv.ui.components.SortMenu
 import org.aurral.firetv.ui.theme.Dimens
 
 @Composable
@@ -31,12 +31,12 @@ fun ArtistsScreen(
 
     Column(modifier = Modifier.fillMaxSize().padding(top = 16.dp)) {
         SectionHeader(title = "Artists")
-        SortSelector(
+        SortMenu(
             options = ArtistSort.entries,
             selected = sort,
             labelOf = { it.label },
             onSelect = viewModel::setSort,
-            modifier = Modifier.padding(horizontal = Dimens.ScreenPadding, vertical = 4.dp),
+            modifier = Modifier.padding(start = Dimens.ScreenPadding, top = 4.dp),
         )
         LoadStateListContent(
             state = state,

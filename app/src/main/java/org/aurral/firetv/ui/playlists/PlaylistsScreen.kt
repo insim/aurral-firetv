@@ -28,7 +28,7 @@ import org.aurral.firetv.ui.common.formatDuration
 import org.aurral.firetv.ui.components.ActionRow
 import org.aurral.firetv.ui.components.FocusHighlight
 import org.aurral.firetv.ui.components.SectionHeader
-import org.aurral.firetv.ui.components.SortSelector
+import org.aurral.firetv.ui.components.SortMenu
 import org.aurral.firetv.ui.components.TextInputDialog
 import org.aurral.firetv.ui.theme.Dimens
 
@@ -43,12 +43,12 @@ fun PlaylistsScreen(
 
     Column(modifier = Modifier.fillMaxSize().padding(top = 16.dp)) {
         SectionHeader(title = "Playlists")
-        SortSelector(
+        SortMenu(
             options = PlaylistSort.entries,
             selected = sort,
             labelOf = { it.label },
             onSelect = viewModel::setSort,
-            modifier = Modifier.padding(horizontal = Dimens.ScreenPadding, vertical = 4.dp),
+            modifier = Modifier.padding(start = Dimens.ScreenPadding, top = 4.dp),
         )
 
         FocusHighlight(modifier = Modifier.padding(start = Dimens.ScreenPadding, top = 4.dp, bottom = 4.dp)) {

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -51,6 +53,7 @@ fun ArtistDetailScreen(
                 ArtistHeader(
                     name = detail.artist.name,
                     albumCount = detail.artist.albumCount,
+                    bio = detail.bio,
                     hasSongs = detail.topSongs.isNotEmpty(),
                     onPlayAll = { viewModel.playFrom(0) },
                     onShuffle = viewModel::playShuffled,
@@ -95,6 +98,7 @@ fun ArtistDetailScreen(
 private fun ArtistHeader(
     name: String,
     albumCount: Int,
+    bio: String,
     hasSongs: Boolean,
     onPlayAll: () -> Unit,
     onShuffle: () -> Unit,
@@ -116,6 +120,16 @@ private fun ArtistHeader(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+            if (bio.isNotBlank()) {
+                Text(
+                    text = bio,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 4,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.fillMaxWidth(0.75f).padding(top = 6.dp),
+                )
+            }
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier.padding(top = 10.dp),

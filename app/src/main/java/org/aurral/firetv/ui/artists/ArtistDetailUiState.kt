@@ -6,4 +6,5 @@ import org.aurral.firetv.data.model.Song
 data class ArtistDetailUiState(
     val artist: Artist,
     val topSongs: List<Song>,
+    val bio: String = "",
 )
