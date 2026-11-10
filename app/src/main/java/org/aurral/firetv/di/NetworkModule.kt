@@ -6,6 +6,7 @@ import okhttp3.OkHttpClient
 import org.aurral.firetv.data.api.SubsonicApi
 import org.aurral.firetv.data.api.interceptor.PLACEHOLDER_BASE_URL
 import org.aurral.firetv.data.api.interceptor.SubsonicRequestInterceptor
+import org.aurral.firetv.data.api.interceptor.SubsonicResponseGuardInterceptor
 import org.aurral.firetv.data.session.CredentialsProvider
 import retrofit2.Retrofit
 import kotlinx.serialization.json.Json
@@ -33,6 +34,7 @@ object NetworkModule {
     fun provideOkHttpClient(credentialsProvider: CredentialsProvider): OkHttpClient =
         OkHttpClient.Builder()
             .addInterceptor(SubsonicRequestInterceptor(credentialsProvider))
+            .addInterceptor(SubsonicResponseGuardInterceptor())
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
