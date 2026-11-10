@@ -56,7 +56,7 @@ class PlaybackService : MediaSessionService() {
     private val playerListener = object : Player.Listener {
         override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
             scrobbler.onTrackStarted(mediaItem?.mediaId)
-            artworkPrefetcher.prefetch(player.nextMediaItem)
+            artworkPrefetcher.prefetch(player.nextArtworkItem())
         }
 
         override fun onPlaybackStateChanged(playbackState: Int) {
@@ -135,6 +135,12 @@ class PlaybackService : MediaSessionService() {
         .build()
 
     private fun Player.durationOrZero(): Long = duration.let { if (it == C.TIME_UNSET) 0L else it }
+
+    /** The upcoming item, or null at the end of the queue. */
+    private fun Player.nextArtworkItem(): MediaItem? {
+        val nextIndex = nextMediaItemIndex
+        return if (nextIndex == C.INDEX_UNSET) null else getMediaItemAt(nextIndex)
+    }
 
     private companion object {
         const val PROGRESS_TICK_MS = 5_000L

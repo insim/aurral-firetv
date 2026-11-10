@@ -46,6 +46,6 @@ fun MediaItem.toQueueItem(): QueueItem {
         artist = metadata.artist?.toString().orEmpty(),
         album = metadata.albumTitle?.toString().orEmpty(),
         coverArtId = coverArtId(),
-        durationMs = metadata.durationMs.takeIf { it > 0L } ?: 0L,
+        durationMs = metadata.durationMs?.takeIf { it > 0L } ?: 0L,
     )
 }
