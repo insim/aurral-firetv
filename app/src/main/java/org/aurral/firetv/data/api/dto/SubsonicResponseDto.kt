@@ -19,6 +19,7 @@ data class SubsonicResponseDto(
     val artists: ArtistsDto? = null,
     val artist: ArtistDto? = null,
     val genres: GenresDto? = null,
+    val song: ChildDto? = null,
     val songsByGenre: SongsDto? = null,
     val searchResult3: SearchResult3Dto? = null,
     val starred2: Starred2Dto? = null,
